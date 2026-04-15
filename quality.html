@@ -67,6 +67,16 @@
   .gnb { display: flex; align-items: center; gap: 4px; }
   .gnb-item { position: relative; padding: 8px 16px; font-size: 0.9375rem; font-weight: 500; color: var(--text-primary); border-radius: var(--radius-sm); transition: var(--transition); cursor: pointer; }
   .gnb-item:hover { background: var(--bg-section); color: var(--brand-primary); }
+  .gnb-item.gnb-benchmark { color: var(--brand-accent); font-weight: 700; }
+  /* 메인 히어로 위(투명 헤더): GNB·무료 벤치마킹 흰색 — JS가 #aw-header에 .on-hero 부여 */
+  #aw-header.on-hero .logo { color: white; }
+  #aw-header.on-hero .logo-icon { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); }
+  #aw-header.on-hero .gnb-item { color: rgba(255,255,255,0.95); }
+  #aw-header.on-hero .gnb-item:hover { background: rgba(255,255,255,0.12); color: white; }
+  #aw-header.on-hero .gnb-item.gnb-benchmark { color: white !important; }
+  #aw-header.on-hero .header-bm-btn.btn-outline { color: white; border-color: rgba(255,255,255,0.9); background: transparent; }
+  #aw-header.on-hero .header-bm-btn.btn-outline:hover { background: rgba(255,255,255,0.15); color: white; border-color: white; }
+  #aw-header.on-hero .mobile-menu-btn span { background: white; }
   .header-actions { display: flex; align-items: center; gap: 10px; }
   .gnb-dropdown { position: absolute; top: calc(100% + 8px); left: 0; min-width: 200px; background: white; border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); padding: 8px; opacity: 0; visibility: hidden; transform: translateY(-8px); transition: var(--transition); z-index: 100; }
   .gnb-item:hover .gnb-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
@@ -166,11 +176,11 @@
           </div>
         </div>
         <a href="pricing.html"    class="gnb-item">요금제</a>
-        <a href="benchmark.html"  class="gnb-item" style="color:var(--brand-accent);font-weight:700">무료 벤치마킹</a>
+        <a href="benchmark.html"  class="gnb-item gnb-benchmark">무료 벤치마킹</a>
         <a href="blog.html"       class="gnb-item">블로그</a>
       </nav>
       <div class="header-actions">
-        <a href="benchmark.html" class="btn btn-outline btn-sm">무료 벤치마킹</a>
+        <a href="benchmark.html" class="btn btn-outline btn-sm header-bm-btn">무료 벤치마킹</a>
         <a href="start.html"     class="btn btn-accent  btn-sm">프로젝트 시작하기 ●</a>
         <button class="mobile-menu-btn" aria-label="메뉴">
           <span></span><span></span><span></span>
@@ -320,18 +330,25 @@
 
   
 <script>
-  // Header scroll (transparent 헤더 전용)
+  // Header scroll (transparent 헤더 전용 — 메인은 히어로 높이 기준으로 solid + GNB 기본색)
   const awHdr = document.getElementById('aw-header');
+  const awHero = document.getElementById('aw-hero');
+  function awUpdateHeader() {
+    if (!awHdr) return;
+    const y = window.scrollY || 0;
+    const threshold = awHero ? awHero.offsetHeight : 60;
+    if (y >= threshold) {
+      awHdr.classList.remove('transparent', 'on-hero');
+      awHdr.classList.add('solid');
+    } else {
+      awHdr.classList.add('transparent', 'on-hero');
+      awHdr.classList.remove('solid');
+    }
+  }
   if (awHdr) {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 60) {
-        awHdr.classList.remove('transparent');
-        awHdr.classList.add('solid');
-      } else {
-        awHdr.classList.add('transparent');
-        awHdr.classList.remove('solid');
-      }
-    });
+    awUpdateHeader();
+    window.addEventListener('scroll', awUpdateHeader, { passive: true });
+    window.addEventListener('resize', awUpdateHeader);
   }
   // Scroll Reveal
   const revEls = document.querySelectorAll('.reveal');
