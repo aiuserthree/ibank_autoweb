@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI 기술 소개 | AutoWeb Agent</title>
+  <meta name="description" content="AutoWeb Agent를 구성하는 6개 AI 에이전트 기술 스택 소개"/>
+  
+<style>
+  :root {
+    --brand-primary: #0EA5E9;
+    --brand-accent:  #F97316;
+    --text-primary:  #0D1117;
+    --text-sub:      #4A5568;
+    --bg-base:       #FFFFFF;
+    --bg-section:    #F0F9FF;
+    --border:        #E0F2FE;
+    --white:         #ffffff;
+    --radius-sm:     8px;
+    --radius-md:     16px;
+    --radius-lg:     24px;
+    --shadow-sm:     0 2px 8px rgba(14,165,233,0.08);
+    --shadow-md:     0 8px 32px rgba(14,165,233,0.12);
+    --shadow-lg:     0 24px 64px rgba(14,165,233,0.16);
+    --transition:    all 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--text-primary); background: var(--bg-base);
+    line-height: 1.6; overflow-x: hidden;
+  }
+  a { text-decoration: none; color: inherit; }
+  button { cursor: pointer; border: none; font-family: inherit; background: none; }
+  .container  { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .section    { padding: 96px 0; }
+  .section-sm { padding: 64px 0; }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: var(--radius-sm); font-size: 1rem; font-weight: 600; transition: var(--transition); white-space: nowrap; cursor: pointer; border: none; font-family: inherit; }
+  .btn-primary { background: var(--brand-primary); color: white; box-shadow: 0 4px 16px rgba(14,165,233,0.3); }
+  .btn-primary:hover { background: #0284c7; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(14,165,233,0.4); }
+  .btn-accent  { background: var(--brand-accent); color: white; box-shadow: 0 4px 16px rgba(249,115,22,0.3); }
+  .btn-accent:hover  { background: #ea6b0a; transform: translateY(-2px); }
+  .btn-outline { background: transparent; color: var(--brand-primary); border: 2px solid var(--brand-primary); }
+  .btn-outline:hover { background: var(--brand-primary); color: white; }
+  .btn-ghost   { background: rgba(255,255,255,0.1); color: white; border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(8px); }
+  .btn-ghost:hover   { background: rgba(255,255,255,0.2); }
+  .btn-lg { padding: 18px 36px; font-size: 1.125rem; border-radius: var(--radius-md); }
+  .btn-sm { padding: 10px 20px; font-size: 0.875rem; }
+
+  /* Badge */
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 100px; font-size: 0.8125rem; font-weight: 600; }
+  .badge-primary { background: rgba(14,165,233,0.1); color: #0284c7; border: 1px solid rgba(14,165,233,0.2); }
+  .badge-accent  { background: rgba(249,115,22,0.1); color: #c05213; border: 1px solid rgba(249,115,22,0.2); }
+  .badge-white   { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
+
+  /* Header */
+  .header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 0 24px; height: 72px; display: flex; align-items: center; transition: var(--transition); }
+  .header.transparent { background: transparent; }
+  .header.solid { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+  .header.always-solid { background: rgba(255,255,255,0.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+  .header-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 10px; font-size: 1.25rem; font-weight: 800; color: var(--brand-primary); }
+  .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent)); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+  .gnb { display: flex; align-items: center; gap: 4px; }
+  .gnb-item { position: relative; padding: 8px 16px; font-size: 0.9375rem; font-weight: 500; color: var(--text-primary); border-radius: var(--radius-sm); transition: var(--transition); cursor: pointer; }
+  .gnb-item:hover { background: var(--bg-section); color: var(--brand-primary); }
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+  .gnb-dropdown { position: absolute; top: calc(100% + 8px); left: 0; min-width: 200px; background: white; border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); padding: 8px; opacity: 0; visibility: hidden; transform: translateY(-8px); transition: var(--transition); z-index: 100; }
+  .gnb-item:hover .gnb-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+  .dropdown-item { display: block; padding: 10px 14px; font-size: 0.9rem; color: var(--text-primary); border-radius: var(--radius-sm); transition: var(--transition); }
+  .dropdown-item:hover { background: var(--bg-section); color: var(--brand-primary); }
+  .mobile-menu-btn { display: none; flex-direction: column; gap: 5px; width: 32px; height: 32px; cursor: pointer; justify-content: center; background: none; border: none; }
+  .mobile-menu-btn span { width: 100%; height: 2px; background: var(--text-primary); border-radius: 2px; display: block; transition: var(--transition); }
+
+  /* Kakao Button */
+  .kakao-btn { background: #FEE500; color: #000; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; border-radius: var(--radius-sm); transition: var(--transition); cursor: pointer; border: none; font-family: inherit; }
+  .kakao-btn:hover { background: #f0d700; transform: translateY(-2px); }
+
+  /* Section helpers */
+  .section-header { text-align: center; margin-bottom: 16px; }
+  .section-sub    { text-align: center; color: var(--text-sub); font-size: 1.1rem; max-width: 560px; margin: 0 auto 48px; }
+  .text-center    { text-align: center; }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Footer */
+  .footer { background: var(--text-primary); color: white; padding: 56px 0 32px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+  .footer-col h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(255,255,255,0.4); margin-bottom: 14px; }
+  .footer-links   { list-style: none; }
+  .footer-links li { margin-bottom: 8px; }
+  .footer-links a  { color: rgba(255,255,255,0.6); font-size: 0.9rem; transition: var(--transition); }
+  .footer-links a:hover { color: white; }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 28px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-bottom p { color: rgba(255,255,255,0.45); font-size: 0.875rem; }
+  .footer-legal { display: flex; gap: 20px; }
+  .footer-legal a { color: rgba(255,255,255,0.45); font-size: 0.875rem; transition: var(--transition); }
+  .footer-legal a:hover { color: rgba(255,255,255,0.8); }
+
+  /* Headings */
+  h1 { font-size: clamp(2rem,5vw,3.5rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; }
+  h2 { font-size: clamp(1.5rem,3vw,2.5rem); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+  h3 { font-size: clamp(1rem,2vw,1.4rem); font-weight: 600; line-height: 1.3; }
+
+  /* Responsive */
+  @media (max-width: 1024px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 768px)  { .gnb { display: none; } .mobile-menu-btn { display: flex; } .section { padding: 64px 0; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px)  { .footer-grid { grid-template-columns: 1fr; } .btn-lg { padding: 14px 24px; font-size: 1rem; } }
+</style>
+
+  
+<style>
+  .tech-hero { padding: 140px 0 80px; background: linear-gradient(135deg,#0c2340 0%,#0EA5E9 100%); text-align: center; }
+  .tech-hero h1 { color: white; font-size: clamp(2rem,4vw,2.75rem); font-weight: 800; margin-bottom: 16px; }
+  .tech-hero p  { color: rgba(255,255,255,0.75); font-size: 1.1rem; max-width: 520px; margin: 0 auto; }
+  .tech-stack { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 48px; }
+  .tech-card  { padding: 32px; background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); transition: var(--transition); }
+  .tech-card:hover { border-color: var(--brand-primary); box-shadow: var(--shadow-md); transform: translateY(-4px); }
+  .tech-icon  { font-size: 2.5rem; margin-bottom: 16px; }
+  .tech-name  { font-weight: 800; font-size: 1.125rem; margin-bottom: 8px; }
+  .tech-role  { color: var(--brand-primary); font-size: 0.8125rem; font-weight: 700; margin-bottom: 10px; }
+  .tech-desc  { color: var(--text-sub); font-size: 0.875rem; line-height: 1.7; }
+  .flow-diagram { background: var(--text-primary); border-radius: var(--radius-lg); padding: 48px; margin-top: 48px; }
+  .flow-title { color: white; font-size: 1.5rem; font-weight: 800; text-align: center; margin-bottom: 40px; }
+  .flow-steps { display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; }
+  .flow-step  { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 20px 16px; }
+  .flow-step-icon { width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 10px; border: 2px solid rgba(255,255,255,0.2); }
+  .flow-step-label { color: rgba(255,255,255,0.8); font-size: 0.8rem; font-weight: 600; max-width: 80px; line-height: 1.3; }
+  .flow-arrow { color: var(--brand-accent); font-size: 1.5rem; font-weight: 700; padding: 0 4px; margin-bottom: 20px; }
+  @media (max-width: 768px) { .tech-stack { grid-template-columns: 1fr 1fr; } .flow-arrow { display: none; } }
+  @media (max-width: 480px) { .tech-stack { grid-template-columns: 1fr; } }
+</style>
+
+</head>
+<body>
+  
+  <header class="header always-solid" >
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2l8 6-3 10H5L2 8l8-6z" fill="rgba(255,255,255,0.3)" stroke="white" stroke-width="1.5"/>
+            <circle cx="10" cy="10" r="2.5" fill="white"/>
+          </svg>
+        </div>
+        AutoWeb
+      </a>
+      <nav class="gnb">
+        <div class="gnb-item">서비스 소개
+          <div class="gnb-dropdown">
+            <a href="service.html"   class="dropdown-item">10단계 프로세스</a>
+            <a href="ai-tech.html"   class="dropdown-item">AI 기술</a>
+            <a href="quality.html"   class="dropdown-item">품질 보증</a>
+          </div>
+        </div>
+        <div class="gnb-item">포트폴리오
+          <div class="gnb-dropdown">
+            <a href="portfolio.html" class="dropdown-item">전체 보기</a>
+            <a href="portfolio.html" class="dropdown-item">커머스/쇼핑몰</a>
+            <a href="portfolio.html" class="dropdown-item">스타트업/기업</a>
+            <a href="portfolio.html" class="dropdown-item">캠페인/이벤트</a>
+          </div>
+        </div>
+        <a href="pricing.html"    class="gnb-item">요금제</a>
+        <a href="benchmark.html"  class="gnb-item" style="color:var(--brand-accent);font-weight:700">무료 벤치마킹</a>
+        <a href="blog.html"       class="gnb-item">블로그</a>
+      </nav>
+      <div class="header-actions">
+        <a href="benchmark.html" class="btn btn-outline btn-sm">무료 벤치마킹</a>
+        <a href="start.html"     class="btn btn-accent  btn-sm">프로젝트 시작하기 ●</a>
+        <button class="mobile-menu-btn" aria-label="메뉴">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  
+  <div class="tech-hero">
+    <div class="container">
+      <div class="badge badge-white" style="margin-bottom:20px">AI 기술</div>
+      <h1>AutoWeb을 만드는<br>AI 기술 스택</h1>
+      <p>최신 AI 기술의 결합으로 에이전시급 품질의 웹사이트 제작을 자동화합니다.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header reveal"><div class="badge badge-primary">AI 기술 스택</div></div>
+      <h2 class="reveal" style="text-align:center;margin-bottom:16px">어떤 AI가 사용되나요?</h2>
+      <p class="section-sub reveal">6개의 전문화된 AI 에이전트가 협력해 웹사이트를 완성합니다.</p>
+      <div class="tech-stack">
+        <div class="tech-card reveal"><div class="tech-icon">🧠</div><div class="tech-name">기획 AI Agent</div><div class="tech-role">GPT-4 Turbo 기반</div><p class="tech-desc">요구사항을 분석하고 최적의 사이트 구조와 정보 아키텍처를 자동으로 도출합니다. 업계 레퍼런스 수천 개를 학습했습니다.</p></div>
+        <div class="tech-card reveal"><div class="tech-icon">🎨</div><div class="tech-name">디자인 AI Agent</div><div class="tech-role">Claude 3 + Figma API</div><p class="tech-desc">브랜드 아이덴티티를 학습해 일관된 디자인 시스템을 구축합니다. 색상, 타이포그래피, 레이아웃을 자동 결정합니다.</p></div>
+        <div class="tech-card reveal"><div class="tech-icon">⚙️</div><div class="tech-name">개발 AI Agent</div><div class="tech-role">GitHub Copilot + 자체 모델</div><p class="tech-desc">Next.js 14 기반의 최적화된 코드를 자동 생성합니다. TypeScript, Tailwind CSS, SEO 최적화를 모두 자동 처리합니다.</p></div>
+        <div class="tech-card reveal"><div class="tech-icon">🔍</div><div class="tech-name">QA AI Agent</div><div class="tech-role">자체 검수 모델</div><p class="tech-desc">30개 이상의 체크리스트로 코드 품질, 성능, 접근성, 보안을 자동 검수합니다. 이슈 발견 즉시 자동 수정합니다.</p></div>
+        <div class="tech-card reveal"><div class="tech-icon">📊</div><div class="tech-name">SEO AI Agent</div><div class="tech-role">Search API + NLP</div><p class="tech-desc">실시간 검색 트렌드를 분석해 최적의 키워드와 메타 태그를 자동 생성합니다. 구조화 데이터도 자동 적용합니다.</p></div>
+        <div class="tech-card reveal"><div class="tech-icon">🚀</div><div class="tech-name">배포 AI Agent</div><div class="tech-role">GitHub Actions + NCP</div><p class="tech-desc">검수 완료 즉시 NCP에 자동 배포합니다. SSL, CDN, 캐싱, 모니터링이 모두 자동으로 설정됩니다.</p></div>
+      </div>
+
+      <div class="flow-diagram reveal">
+        <div class="flow-title">🤖 AI Agent 협업 플로우</div>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="flow-step-icon">👤</div><div class="flow-step-label">고객 요구사항 입력</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">🧠</div><div class="flow-step-label">기획 AI 분석</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">🎨</div><div class="flow-step-label">디자인 AI 생성</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">⚙️</div><div class="flow-step-label">개발 AI 코딩</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">🔍</div><div class="flow-step-label">QA AI 검수</div></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step"><div class="flow-step-icon">🚀</div><div class="flow-step-label">자동 배포 완료</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="logo" style="color:white;margin-bottom:16px">
+            <div class="logo-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M10 2l8 6-3 10H5L2 8l8-6z" fill="rgba(255,255,255,0.3)" stroke="white" stroke-width="1.5"/>
+              </svg>
+            </div>
+            AutoWeb
+          </div>
+          <p style="color:rgba(255,255,255,0.55);font-size:0.9rem;line-height:1.7">
+            문의부터 배포까지, AI가 알아서 합니다.<br>
+            아이뱅크 AX사업본부가 운영하는<br>
+            AI 자동화 웹/앱 개발 서비스.
+          </p>
+          <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap">
+            <a href="start.html"     class="btn-accent btn btn-sm" style="font-size:0.8rem">프로젝트 시작</a>
+            <a href="benchmark.html" class="btn-outline btn btn-sm" style="font-size:0.8rem">무료 벤치마킹</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <ul class="footer-links">
+            <li><a href="service.html">10단계 프로세스</a></li>
+            <li><a href="ai-tech.html">AI 기술 소개</a></li>
+            <li><a href="quality.html">품질 보증</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>포트폴리오</h4>
+          <ul class="footer-links">
+            <li><a href="portfolio.html">전체 보기</a></li>
+            <li><a href="portfolio.html">커머스/쇼핑몰</a></li>
+            <li><a href="portfolio.html">스타트업/기업</a></li>
+            <li><a href="portfolio.html">이벤트/캠페인</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>고객지원</h4>
+          <ul class="footer-links">
+            <li><a href="start.html">프로젝트 시작</a></li>
+            <li><a href="benchmark.html">무료 벤치마킹</a></li>
+            <li><a href="pricing.html">요금제</a></li>
+            <li><a href="blog.html">블로그</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 ibank AX — AutoWeb Agent. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#">개인정보처리방침</a>
+          <a href="#">이용약관</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  
+<script>
+  // Header scroll (transparent 헤더 전용)
+  const awHdr = document.getElementById('aw-header');
+  if (awHdr) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        awHdr.classList.remove('transparent');
+        awHdr.classList.add('solid');
+      } else {
+        awHdr.classList.add('transparent');
+        awHdr.classList.remove('solid');
+      }
+    });
+  }
+  // Scroll Reveal
+  const revEls = document.querySelectorAll('.reveal');
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  revEls.forEach(r => revObs.observe(r));
+</script>
+
+  
+</body>
+</html>

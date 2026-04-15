@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>10단계 AI 서비스 프로세스 | AutoWeb Agent</title>
+  <meta name="description" content="챗봇 상담부터 자동 배포까지 10단계 AI 자율 수행 웹사이트 제작 프로세스 상세 안내"/>
+  
+<style>
+  :root {
+    --brand-primary: #0EA5E9;
+    --brand-accent:  #F97316;
+    --text-primary:  #0D1117;
+    --text-sub:      #4A5568;
+    --bg-base:       #FFFFFF;
+    --bg-section:    #F0F9FF;
+    --border:        #E0F2FE;
+    --white:         #ffffff;
+    --radius-sm:     8px;
+    --radius-md:     16px;
+    --radius-lg:     24px;
+    --shadow-sm:     0 2px 8px rgba(14,165,233,0.08);
+    --shadow-md:     0 8px 32px rgba(14,165,233,0.12);
+    --shadow-lg:     0 24px 64px rgba(14,165,233,0.16);
+    --transition:    all 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--text-primary); background: var(--bg-base);
+    line-height: 1.6; overflow-x: hidden;
+  }
+  a { text-decoration: none; color: inherit; }
+  button { cursor: pointer; border: none; font-family: inherit; background: none; }
+  .container  { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .section    { padding: 96px 0; }
+  .section-sm { padding: 64px 0; }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: var(--radius-sm); font-size: 1rem; font-weight: 600; transition: var(--transition); white-space: nowrap; cursor: pointer; border: none; font-family: inherit; }
+  .btn-primary { background: var(--brand-primary); color: white; box-shadow: 0 4px 16px rgba(14,165,233,0.3); }
+  .btn-primary:hover { background: #0284c7; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(14,165,233,0.4); }
+  .btn-accent  { background: var(--brand-accent); color: white; box-shadow: 0 4px 16px rgba(249,115,22,0.3); }
+  .btn-accent:hover  { background: #ea6b0a; transform: translateY(-2px); }
+  .btn-outline { background: transparent; color: var(--brand-primary); border: 2px solid var(--brand-primary); }
+  .btn-outline:hover { background: var(--brand-primary); color: white; }
+  .btn-ghost   { background: rgba(255,255,255,0.1); color: white; border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(8px); }
+  .btn-ghost:hover   { background: rgba(255,255,255,0.2); }
+  .btn-lg { padding: 18px 36px; font-size: 1.125rem; border-radius: var(--radius-md); }
+  .btn-sm { padding: 10px 20px; font-size: 0.875rem; }
+
+  /* Badge */
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 100px; font-size: 0.8125rem; font-weight: 600; }
+  .badge-primary { background: rgba(14,165,233,0.1); color: #0284c7; border: 1px solid rgba(14,165,233,0.2); }
+  .badge-accent  { background: rgba(249,115,22,0.1); color: #c05213; border: 1px solid rgba(249,115,22,0.2); }
+  .badge-white   { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
+
+  /* Header */
+  .header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 0 24px; height: 72px; display: flex; align-items: center; transition: var(--transition); }
+  .header.transparent { background: transparent; }
+  .header.solid { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+  .header.always-solid { background: rgba(255,255,255,0.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+  .header-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 10px; font-size: 1.25rem; font-weight: 800; color: var(--brand-primary); }
+  .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent)); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+  .gnb { display: flex; align-items: center; gap: 4px; }
+  .gnb-item { position: relative; padding: 8px 16px; font-size: 0.9375rem; font-weight: 500; color: var(--text-primary); border-radius: var(--radius-sm); transition: var(--transition); cursor: pointer; }
+  .gnb-item:hover { background: var(--bg-section); color: var(--brand-primary); }
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+  .gnb-dropdown { position: absolute; top: calc(100% + 8px); left: 0; min-width: 200px; background: white; border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); padding: 8px; opacity: 0; visibility: hidden; transform: translateY(-8px); transition: var(--transition); z-index: 100; }
+  .gnb-item:hover .gnb-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+  .dropdown-item { display: block; padding: 10px 14px; font-size: 0.9rem; color: var(--text-primary); border-radius: var(--radius-sm); transition: var(--transition); }
+  .dropdown-item:hover { background: var(--bg-section); color: var(--brand-primary); }
+  .mobile-menu-btn { display: none; flex-direction: column; gap: 5px; width: 32px; height: 32px; cursor: pointer; justify-content: center; background: none; border: none; }
+  .mobile-menu-btn span { width: 100%; height: 2px; background: var(--text-primary); border-radius: 2px; display: block; transition: var(--transition); }
+
+  /* Kakao Button */
+  .kakao-btn { background: #FEE500; color: #000; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; border-radius: var(--radius-sm); transition: var(--transition); cursor: pointer; border: none; font-family: inherit; }
+  .kakao-btn:hover { background: #f0d700; transform: translateY(-2px); }
+
+  /* Section helpers */
+  .section-header { text-align: center; margin-bottom: 16px; }
+  .section-sub    { text-align: center; color: var(--text-sub); font-size: 1.1rem; max-width: 560px; margin: 0 auto 48px; }
+  .text-center    { text-align: center; }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Footer */
+  .footer { background: var(--text-primary); color: white; padding: 56px 0 32px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+  .footer-col h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(255,255,255,0.4); margin-bottom: 14px; }
+  .footer-links   { list-style: none; }
+  .footer-links li { margin-bottom: 8px; }
+  .footer-links a  { color: rgba(255,255,255,0.6); font-size: 0.9rem; transition: var(--transition); }
+  .footer-links a:hover { color: white; }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 28px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-bottom p { color: rgba(255,255,255,0.45); font-size: 0.875rem; }
+  .footer-legal { display: flex; gap: 20px; }
+  .footer-legal a { color: rgba(255,255,255,0.45); font-size: 0.875rem; transition: var(--transition); }
+  .footer-legal a:hover { color: rgba(255,255,255,0.8); }
+
+  /* Headings */
+  h1 { font-size: clamp(2rem,5vw,3.5rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; }
+  h2 { font-size: clamp(1.5rem,3vw,2.5rem); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+  h3 { font-size: clamp(1rem,2vw,1.4rem); font-weight: 600; line-height: 1.3; }
+
+  /* Responsive */
+  @media (max-width: 1024px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 768px)  { .gnb { display: none; } .mobile-menu-btn { display: flex; } .section { padding: 64px 0; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px)  { .footer-grid { grid-template-columns: 1fr; } .btn-lg { padding: 14px 24px; font-size: 1rem; } }
+</style>
+
+  
+<style>
+  .srv-hero { padding: 140px 0 80px; background: linear-gradient(135deg,#0c2340 0%,#0EA5E9 100%); text-align: center; }
+  .srv-hero h1 { color: white; font-size: clamp(2rem,4vw,3rem); font-weight: 800; margin-bottom: 20px; }
+  .srv-hero p  { color: rgba(255,255,255,0.8); font-size: 1.1rem; max-width: 560px; margin: 0 auto; }
+  /* Steps Detail */
+  .steps-detail { display: flex; flex-direction: column; gap: 0; }
+  .step-detail  { display: grid; grid-template-columns: auto 1fr; gap: 0; }
+  .step-detail:nth-child(even) .step-detail-content { order: -1; }
+  .step-left    { display: flex; flex-direction: column; align-items: center; padding: 0 32px; }
+  .step-circle-lg { width: 72px; height: 72px; border-radius: 50%; background: var(--brand-primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; font-weight: 900; position: relative; z-index: 1; flex-shrink: 0; box-shadow: 0 4px 20px rgba(14,165,233,0.4); }
+  .step-line    { width: 3px; flex: 1; background: linear-gradient(180deg,var(--brand-primary),var(--brand-accent)); margin: 8px 0; min-height: 60px; }
+  .step-detail-content { padding: 24px 32px 48px 0; }
+  .step-detail-content h3 { font-size: 1.375rem; font-weight: 800; margin-bottom: 12px; }
+  .step-detail-content p  { color: var(--text-sub); line-height: 1.8; margin-bottom: 16px; }
+  .step-time-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(14,165,233,0.1); border: 1px solid rgba(14,165,233,0.2); border-radius: 100px; font-size: 0.8125rem; font-weight: 700; color: var(--brand-primary); }
+  .step-feature-list { list-style: none; margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .step-feature-list li { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-sub); }
+  .step-feature-list li::before { content: '→'; color: var(--brand-accent); font-weight: 700; flex-shrink: 0; }
+  /* AI Tech Grid */
+  .ai-tech-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 48px; }
+  .ai-tech-card { padding: 32px; background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); transition: var(--transition); }
+  .ai-tech-card:hover { border-color: var(--brand-primary); box-shadow: var(--shadow-md); transform: translateY(-4px); }
+  .ai-tech-icon  { font-size: 2.5rem; margin-bottom: 16px; }
+  .ai-tech-title { font-weight: 800; font-size: 1.0625rem; margin-bottom: 8px; }
+  .ai-tech-desc  { color: var(--text-sub); font-size: 0.875rem; line-height: 1.7; }
+  @media (max-width: 768px) { .step-detail { grid-template-columns: 1fr; } .step-left { flex-direction: row; padding: 0; gap: 16px; margin-bottom: 16px; } .step-line { display: none; } .step-detail-content { padding: 0 0 40px 0; } .ai-tech-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .ai-tech-grid { grid-template-columns: 1fr; } }
+</style>
+
+</head>
+<body>
+  
+  <header class="header always-solid" >
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2l8 6-3 10H5L2 8l8-6z" fill="rgba(255,255,255,0.3)" stroke="white" stroke-width="1.5"/>
+            <circle cx="10" cy="10" r="2.5" fill="white"/>
+          </svg>
+        </div>
+        AutoWeb
+      </a>
+      <nav class="gnb">
+        <div class="gnb-item">서비스 소개
+          <div class="gnb-dropdown">
+            <a href="service.html"   class="dropdown-item">10단계 프로세스</a>
+            <a href="ai-tech.html"   class="dropdown-item">AI 기술</a>
+            <a href="quality.html"   class="dropdown-item">품질 보증</a>
+          </div>
+        </div>
+        <div class="gnb-item">포트폴리오
+          <div class="gnb-dropdown">
+            <a href="portfolio.html" class="dropdown-item">전체 보기</a>
+            <a href="portfolio.html" class="dropdown-item">커머스/쇼핑몰</a>
+            <a href="portfolio.html" class="dropdown-item">스타트업/기업</a>
+            <a href="portfolio.html" class="dropdown-item">캠페인/이벤트</a>
+          </div>
+        </div>
+        <a href="pricing.html"    class="gnb-item">요금제</a>
+        <a href="benchmark.html"  class="gnb-item" style="color:var(--brand-accent);font-weight:700">무료 벤치마킹</a>
+        <a href="blog.html"       class="gnb-item">블로그</a>
+      </nav>
+      <div class="header-actions">
+        <a href="benchmark.html" class="btn btn-outline btn-sm">무료 벤치마킹</a>
+        <a href="start.html"     class="btn btn-accent  btn-sm">프로젝트 시작하기 ●</a>
+        <button class="mobile-menu-btn" aria-label="메뉴">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  
+  <div class="srv-hero">
+    <div class="container">
+      <div class="badge badge-white" style="margin-bottom:20px">10단계 AI 프로세스</div>
+      <h1>AI가 자율 수행하는<br>웹사이트 제작 전 과정</h1>
+      <p>챗봇 상담부터 서버 배포까지, 기존 에이전시의 모든 과정을 AI 에이전트가 자동으로 처리합니다.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header reveal"><div class="badge badge-primary">10단계 워크플로우</div></div>
+      <h2 class="reveal" style="text-align:center;margin-bottom:16px">단계별 상세 프로세스</h2>
+      <p class="section-sub reveal">각 단계가 AI 에이전트에 의해 자율적으로 실행됩니다.</p>
+      <div class="steps-detail">
+        <div class="step-detail reveal">
+          <div class="step-left">
+            <div class="step-circle-lg">💬</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-detail-content">
+            <span class="step-time-badge">⏱ ~30분</span>
+            <h3 style="margin-top:12px">1단계: 챗봇 상담</h3>
+            <p>AI 챗봇이 프로젝트 요구사항을 수집합니다. 업종, 목적, 레퍼런스, 예산, 일정 등을 대화 형식으로 파악하고 즉시 초기 방향을 제시합니다.</p>
+            <ul class="step-feature-list"><li>자연어 대화 기반 요구사항 수집</li>
+<li>레퍼런스 URL 분석 자동화</li>
+<li>초기 방향 즉시 제안</li></ul>
+          </div>
+        </div>
+
+        <div class="step-detail reveal">
+          <div class="step-left">
+            <div class="step-circle-lg">🔍</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-detail-content">
+            <span class="step-time-badge">⏱ ~1시간</span>
+            <h3 style="margin-top:12px">2단계: 자동 리서치</h3>
+            <p>입력된 레퍼런스 사이트와 경쟁사를 AI가 자동으로 분석합니다. 업계 트렌드, 디자인 패턴, 기능 구성을 파악해 최적의 기획 방향을 도출합니다.</p>
+            <ul class="step-feature-list"><li>경쟁사 사이트 30개 자동 분석</li>
+<li>업계 디자인 트렌드 파악</li>
+<li>기술 스택 추천</li></ul>
+          </div>
+        </div>
+
+        <div class="step-detail reveal">
+          <div class="step-left">
+            <div class="step-circle-lg">💰</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-detail-content">
+            <span class="step-time-badge">⏱ 즉시</span>
+            <h3 style="margin-top:12px">3단계: 견적 생성</h3>
+            <p>리서치 결과와 요구사항을 바탕으로 정확한 견적을 자동 생성합니다. 페이지 수, 기능, 난이도를 고려한 투명한 항목별 견적서를 제공합니다.</p>
+            <ul class="step-feature-list"><li>AI 기반 정확한 견적 산출</li>
+<li>항목별 투명한 비용 공개</li>
+<li>3가지 옵션 견적 제안</li></ul>
+          </div>
+        </div>
+
+        <div class="step-detail reveal">
+          <div class="step-left">
+            <div class="step-circle-lg">📋</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-detail-content">
+            <span class="step-time-badge">⏱ ~2시간</span>
+            <h3 style="margin-top:12px">4단계: 제안서 자동 작성</h3>
+            <p>브랜드 스타일, 기획 방향, 기술 스펙이 담긴 전문 제안서를 AI가 자동 작성합니다. PDF와 온라인 뷰어 형식으로 제공됩니다.</p>
+            <ul class="step-feature-list"><li>전문 제안서 PDF 자동 생성</li>
+<li>브랜드 무드보드 포함</li>
+<li>기술 스펙 상세 명세</li></ul>
+          </div>
+        </div>
+
+        <div class="step-detail reveal">
+          <div class="step-left">
+            <div class="step-circle-lg">📨</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-detail-content">
+            <span class="step-time-badge">⏱ 즉시</span>
+            <h3 style="margin-top:12px">5단계: 자동 발송</h3>
+            <p>완성된 제안서와 견적서를 이메일, 카카오톡으로 자동 발송합니다. 고객 확인 후 계약서도 전자서명으로 처리됩니다.</p>
+            <ul class="step-feature-list"><li>이메일 + 카카오 동시 발송</li>
+<li>전자서명 계약서 연동</li>
+<li>계약 완료 즉시 착수</li></ul>
+          </div>
+        </div>
+
+        <div class="step-detail reveal">
+          <div class="step-left">
+            <div class="step-circle-lg">🎨</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-detail-content">
+            <span class="step-time-badge">⏱ ~1일</span>
+            <h3 style="margin-top:12px">6단계: 시안 생성</h3>
+            <p>AI 디자이너가 브랜드 아이덴티티에 맞는 UI 시안을 생성합니다. 3가지 방향의 시안을 제시하고 고객이 선택합니다.</p>
+            <ul class="step-feature-list"><li>AI 기반 3가지 디자인 방향 제시</li>
+<li>브랜드 컬러·폰트 자동 추출</li>
+<li>실시간 디자인 피드백 반영</li></ul>
+          </div>
+        </div>
+
+        <div class="step-detail reveal">
+          <div class="step-left">
+            <div class="step-circle-lg">⚙️</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-detail-content">
+            <span class="step-time-badge">⏱ 3~7일</span>
+            <h3 style="margin-top:12px">7단계: 자동 개발</h3>
+            <p>선택된 디자인을 기반으로 AI 개발 에이전트가 코드를 자동 생성합니다. Next.js, React 기반의 퍼포먼스 최적화된 코드를 생성합니다.</p>
+            <ul class="step-feature-list"><li>Next.js 기반 자동 코드 생성</li>
+<li>반응형 레이아웃 자동 적용</li>
+<li>SEO 최적화 자동 처리</li></ul>
+          </div>
+        </div>
+
+        <div class="step-detail reveal">
+          <div class="step-left">
+            <div class="step-circle-lg">🔄</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-detail-content">
+            <span class="step-time-badge">⏱ ~1일</span>
+            <h3 style="margin-top:12px">8단계: 공유 및 피드백</h3>
+            <p>개발된 결과물을 스테이징 URL로 고객과 공유합니다. 피드백을 수집하고 AI가 즉시 수정 사항을 반영합니다.</p>
+            <ul class="step-feature-list"><li>스테이징 환경 즉시 제공</li>
+<li>AI 피드백 자동 분류·처리</li>
+<li>실시간 수정 현황 공유</li></ul>
+          </div>
+        </div>
+
+        <div class="step-detail reveal">
+          <div class="step-left">
+            <div class="step-circle-lg">✅</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-detail-content">
+            <span class="step-time-badge">⏱ ~1일</span>
+            <h3 style="margin-top:12px">9단계: AI 검수</h3>
+            <p>SEO, 성능, 보안, 접근성 4개 영역을 AI가 자동으로 검수합니다. 100점 만점 기준으로 점수를 측정하고 부족한 부분을 자동 개선합니다.</p>
+            <ul class="step-feature-list"><li>30개 이상 자동 체크리스트</li>
+<li>성능 점수 90+ 목표</li>
+<li>보안 취약점 자동 패치</li></ul>
+          </div>
+        </div>
+
+        <div class="step-detail reveal">
+          <div class="step-left">
+            <div class="step-circle-lg">🚀</div>
+            
+          </div>
+          <div class="step-detail-content">
+            <span class="step-time-badge">⏱ 즉시</span>
+            <h3 style="margin-top:12px">10단계: 자동 배포</h3>
+            <p>검수 완료 후 NCP(Naver Cloud Platform) 또는 고객 서버에 자동 배포합니다. SSL, CDN, 모니터링이 자동으로 설정됩니다.</p>
+            <ul class="step-feature-list"><li>원클릭 자동 배포</li>
+<li>SSL 인증서 자동 발급</li>
+<li>24시간 업타임 모니터링 시작</li></ul>
+          </div>
+        </div>
+</div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--bg-section)">
+    <div class="container">
+      <div class="section-header reveal"><div class="badge badge-accent">AI 기술</div></div>
+      <h2 class="reveal" style="text-align:center;margin-bottom:16px">어떤 AI 기술이 사용되나요?</h2>
+      <p class="section-sub reveal">최신 AI 기술을 결합해 에이전시급 품질을 자동화합니다.</p>
+      <div class="ai-tech-grid">
+        <div class="ai-tech-card reveal"><div class="ai-tech-icon">🧠</div><h3 class="ai-tech-title">LLM 기반 기획 AI</h3><p class="ai-tech-desc">GPT-4 기반 AI가 요구사항을 분석하고 최적의 사이트 구조와 기획 방향을 자동으로 도출합니다.</p></div>
+        <div class="ai-tech-card reveal"><div class="ai-tech-icon">🎨</div><h3 class="ai-tech-title">AI 디자인 생성</h3><p class="ai-tech-desc">브랜드 아이덴티티를 학습해 일관된 디자인 시스템과 UI 컴포넌트를 자동으로 생성합니다.</p></div>
+        <div class="ai-tech-card reveal"><div class="ai-tech-icon">⚙️</div><h3 class="ai-tech-title">코드 자동 생성</h3><p class="ai-tech-desc">Next.js 14 기반의 SEO 최적화, 반응형, 퍼포먼스 최적화된 코드를 자동으로 생성합니다.</p></div>
+        <div class="ai-tech-card reveal"><div class="ai-tech-icon">🔍</div><h3 class="ai-tech-title">AI QA 검수</h3><p class="ai-tech-desc">30개 이상의 체크리스트를 자동으로 검사하고 발견된 이슈를 자동으로 수정합니다.</p></div>
+        <div class="ai-tech-card reveal"><div class="ai-tech-icon">📊</div><h3 class="ai-tech-title">성능 최적화 AI</h3><p class="ai-tech-desc">Lighthouse 점수 90+를 목표로 이미지 최적화, 코드 분할, 캐싱 전략을 자동 적용합니다.</p></div>
+        <div class="ai-tech-card reveal"><div class="ai-tech-icon">🚀</div><h3 class="ai-tech-title">자동 배포 파이프라인</h3><p class="ai-tech-desc">GitHub Actions + NCP 기반 CI/CD 파이프라인으로 검수 완료 즉시 자동 배포합니다.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div style="background:linear-gradient(135deg,#0EA5E9 0%,var(--brand-accent) 100%);border-radius:var(--radius-lg);padding:72px 56px;text-align:center" class="reveal">
+        <h2 style="color:white;margin-bottom:16px">지금 바로 시작하세요</h2>
+        <p style="color:rgba(255,255,255,0.85);font-size:1.1rem;margin-bottom:40px;max-width:480px;margin-left:auto;margin-right:auto">AI 에이전트가 즉시 프로젝트 분석을 시작합니다. 상담부터 완전 무료입니다.</p>
+        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+          <a href="start.html"     class="btn" style="background:white;color:var(--brand-primary);font-size:1.05rem;padding:16px 36px">프로젝트 상담 신청 →</a>
+          <a href="benchmark.html" class="btn btn-ghost btn-lg">무료 벤치마킹 체험</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="logo" style="color:white;margin-bottom:16px">
+            <div class="logo-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M10 2l8 6-3 10H5L2 8l8-6z" fill="rgba(255,255,255,0.3)" stroke="white" stroke-width="1.5"/>
+              </svg>
+            </div>
+            AutoWeb
+          </div>
+          <p style="color:rgba(255,255,255,0.55);font-size:0.9rem;line-height:1.7">
+            문의부터 배포까지, AI가 알아서 합니다.<br>
+            아이뱅크 AX사업본부가 운영하는<br>
+            AI 자동화 웹/앱 개발 서비스.
+          </p>
+          <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap">
+            <a href="start.html"     class="btn-accent btn btn-sm" style="font-size:0.8rem">프로젝트 시작</a>
+            <a href="benchmark.html" class="btn-outline btn btn-sm" style="font-size:0.8rem">무료 벤치마킹</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <ul class="footer-links">
+            <li><a href="service.html">10단계 프로세스</a></li>
+            <li><a href="ai-tech.html">AI 기술 소개</a></li>
+            <li><a href="quality.html">품질 보증</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>포트폴리오</h4>
+          <ul class="footer-links">
+            <li><a href="portfolio.html">전체 보기</a></li>
+            <li><a href="portfolio.html">커머스/쇼핑몰</a></li>
+            <li><a href="portfolio.html">스타트업/기업</a></li>
+            <li><a href="portfolio.html">이벤트/캠페인</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>고객지원</h4>
+          <ul class="footer-links">
+            <li><a href="start.html">프로젝트 시작</a></li>
+            <li><a href="benchmark.html">무료 벤치마킹</a></li>
+            <li><a href="pricing.html">요금제</a></li>
+            <li><a href="blog.html">블로그</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 ibank AX — AutoWeb Agent. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#">개인정보처리방침</a>
+          <a href="#">이용약관</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  
+<script>
+  // Header scroll (transparent 헤더 전용)
+  const awHdr = document.getElementById('aw-header');
+  if (awHdr) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        awHdr.classList.remove('transparent');
+        awHdr.classList.add('solid');
+      } else {
+        awHdr.classList.add('transparent');
+        awHdr.classList.remove('solid');
+      }
+    });
+  }
+  // Scroll Reveal
+  const revEls = document.querySelectorAll('.reveal');
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  revEls.forEach(r => revObs.observe(r));
+</script>
+
+  
+</body>
+</html>

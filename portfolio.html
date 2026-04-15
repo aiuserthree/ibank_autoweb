@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>포트폴리오 | AutoWeb Agent</title>
+  <meta name="description" content="AutoWeb Agent가 제작한 실제 웹사이트 포트폴리오. 커머스, 랜딩페이지, 기업홈, 이벤트 페이지 등"/>
+  
+<style>
+  :root {
+    --brand-primary: #0EA5E9;
+    --brand-accent:  #F97316;
+    --text-primary:  #0D1117;
+    --text-sub:      #4A5568;
+    --bg-base:       #FFFFFF;
+    --bg-section:    #F0F9FF;
+    --border:        #E0F2FE;
+    --white:         #ffffff;
+    --radius-sm:     8px;
+    --radius-md:     16px;
+    --radius-lg:     24px;
+    --shadow-sm:     0 2px 8px rgba(14,165,233,0.08);
+    --shadow-md:     0 8px 32px rgba(14,165,233,0.12);
+    --shadow-lg:     0 24px 64px rgba(14,165,233,0.16);
+    --transition:    all 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--text-primary); background: var(--bg-base);
+    line-height: 1.6; overflow-x: hidden;
+  }
+  a { text-decoration: none; color: inherit; }
+  button { cursor: pointer; border: none; font-family: inherit; background: none; }
+  .container  { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .section    { padding: 96px 0; }
+  .section-sm { padding: 64px 0; }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: var(--radius-sm); font-size: 1rem; font-weight: 600; transition: var(--transition); white-space: nowrap; cursor: pointer; border: none; font-family: inherit; }
+  .btn-primary { background: var(--brand-primary); color: white; box-shadow: 0 4px 16px rgba(14,165,233,0.3); }
+  .btn-primary:hover { background: #0284c7; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(14,165,233,0.4); }
+  .btn-accent  { background: var(--brand-accent); color: white; box-shadow: 0 4px 16px rgba(249,115,22,0.3); }
+  .btn-accent:hover  { background: #ea6b0a; transform: translateY(-2px); }
+  .btn-outline { background: transparent; color: var(--brand-primary); border: 2px solid var(--brand-primary); }
+  .btn-outline:hover { background: var(--brand-primary); color: white; }
+  .btn-ghost   { background: rgba(255,255,255,0.1); color: white; border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(8px); }
+  .btn-ghost:hover   { background: rgba(255,255,255,0.2); }
+  .btn-lg { padding: 18px 36px; font-size: 1.125rem; border-radius: var(--radius-md); }
+  .btn-sm { padding: 10px 20px; font-size: 0.875rem; }
+
+  /* Badge */
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 100px; font-size: 0.8125rem; font-weight: 600; }
+  .badge-primary { background: rgba(14,165,233,0.1); color: #0284c7; border: 1px solid rgba(14,165,233,0.2); }
+  .badge-accent  { background: rgba(249,115,22,0.1); color: #c05213; border: 1px solid rgba(249,115,22,0.2); }
+  .badge-white   { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
+
+  /* Header */
+  .header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 0 24px; height: 72px; display: flex; align-items: center; transition: var(--transition); }
+  .header.transparent { background: transparent; }
+  .header.solid { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+  .header.always-solid { background: rgba(255,255,255,0.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+  .header-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 10px; font-size: 1.25rem; font-weight: 800; color: var(--brand-primary); }
+  .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent)); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+  .gnb { display: flex; align-items: center; gap: 4px; }
+  .gnb-item { position: relative; padding: 8px 16px; font-size: 0.9375rem; font-weight: 500; color: var(--text-primary); border-radius: var(--radius-sm); transition: var(--transition); cursor: pointer; }
+  .gnb-item:hover { background: var(--bg-section); color: var(--brand-primary); }
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+  .gnb-dropdown { position: absolute; top: calc(100% + 8px); left: 0; min-width: 200px; background: white; border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); padding: 8px; opacity: 0; visibility: hidden; transform: translateY(-8px); transition: var(--transition); z-index: 100; }
+  .gnb-item:hover .gnb-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+  .dropdown-item { display: block; padding: 10px 14px; font-size: 0.9rem; color: var(--text-primary); border-radius: var(--radius-sm); transition: var(--transition); }
+  .dropdown-item:hover { background: var(--bg-section); color: var(--brand-primary); }
+  .mobile-menu-btn { display: none; flex-direction: column; gap: 5px; width: 32px; height: 32px; cursor: pointer; justify-content: center; background: none; border: none; }
+  .mobile-menu-btn span { width: 100%; height: 2px; background: var(--text-primary); border-radius: 2px; display: block; transition: var(--transition); }
+
+  /* Kakao Button */
+  .kakao-btn { background: #FEE500; color: #000; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; border-radius: var(--radius-sm); transition: var(--transition); cursor: pointer; border: none; font-family: inherit; }
+  .kakao-btn:hover { background: #f0d700; transform: translateY(-2px); }
+
+  /* Section helpers */
+  .section-header { text-align: center; margin-bottom: 16px; }
+  .section-sub    { text-align: center; color: var(--text-sub); font-size: 1.1rem; max-width: 560px; margin: 0 auto 48px; }
+  .text-center    { text-align: center; }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Footer */
+  .footer { background: var(--text-primary); color: white; padding: 56px 0 32px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+  .footer-col h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(255,255,255,0.4); margin-bottom: 14px; }
+  .footer-links   { list-style: none; }
+  .footer-links li { margin-bottom: 8px; }
+  .footer-links a  { color: rgba(255,255,255,0.6); font-size: 0.9rem; transition: var(--transition); }
+  .footer-links a:hover { color: white; }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 28px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-bottom p { color: rgba(255,255,255,0.45); font-size: 0.875rem; }
+  .footer-legal { display: flex; gap: 20px; }
+  .footer-legal a { color: rgba(255,255,255,0.45); font-size: 0.875rem; transition: var(--transition); }
+  .footer-legal a:hover { color: rgba(255,255,255,0.8); }
+
+  /* Headings */
+  h1 { font-size: clamp(2rem,5vw,3.5rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; }
+  h2 { font-size: clamp(1.5rem,3vw,2.5rem); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+  h3 { font-size: clamp(1rem,2vw,1.4rem); font-weight: 600; line-height: 1.3; }
+
+  /* Responsive */
+  @media (max-width: 1024px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 768px)  { .gnb { display: none; } .mobile-menu-btn { display: flex; } .section { padding: 64px 0; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px)  { .footer-grid { grid-template-columns: 1fr; } .btn-lg { padding: 14px 24px; font-size: 1rem; } }
+</style>
+
+  
+<style>
+  .port-hero { padding: 140px 0 64px; text-align: center; background: var(--bg-section); border-bottom: 1px solid var(--border); }
+  .port-hero h1 { font-size: clamp(2rem,3vw,2.75rem); font-weight: 800; margin-bottom: 16px; }
+  .port-hero p  { color: var(--text-sub); font-size: 1.1rem; }
+  .port-filters { display: flex; gap: 8px; margin-bottom: 40px; flex-wrap: wrap; }
+  .port-filter  { padding: 8px 20px; border-radius: 100px; border: 2px solid var(--border); background: white; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: var(--transition); font-family: inherit; }
+  .port-filter.active, .port-filter:hover { background: var(--brand-primary); color: white; border-color: var(--brand-primary); }
+  .port-grid    { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+  .port-card    { background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: var(--transition); }
+  .port-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+  .port-thumb   { height: 220px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; position: relative; }
+  .port-tag     { position: absolute; top: 16px; left: 16px; padding: 4px 12px; background: rgba(249,115,22,0.9); border-radius: 100px; font-size: 0.75rem; font-weight: 700; color: white; }
+  .port-body    { padding: 24px; }
+  .port-title   { font-size: 1.0625rem; font-weight: 700; margin-bottom: 8px; }
+  .port-meta    { display: flex; gap: 16px; margin-bottom: 12px; }
+  .port-meta-item { display: flex; align-items: center; gap: 4px; font-size: 0.8125rem; color: var(--text-sub); }
+  .port-desc    { color: var(--text-sub); font-size: 0.875rem; line-height: 1.6; margin-bottom: 16px; }
+  .port-tags    { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .port-tech    { padding: 3px 10px; background: var(--bg-section); border-radius: 100px; font-size: 0.75rem; font-weight: 600; color: var(--text-sub); }
+  @media (max-width: 900px) { .port-grid { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 600px) { .port-grid { grid-template-columns: 1fr; } }
+</style>
+
+</head>
+<body>
+  
+  <header class="header always-solid" >
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2l8 6-3 10H5L2 8l8-6z" fill="rgba(255,255,255,0.3)" stroke="white" stroke-width="1.5"/>
+            <circle cx="10" cy="10" r="2.5" fill="white"/>
+          </svg>
+        </div>
+        AutoWeb
+      </a>
+      <nav class="gnb">
+        <div class="gnb-item">서비스 소개
+          <div class="gnb-dropdown">
+            <a href="service.html"   class="dropdown-item">10단계 프로세스</a>
+            <a href="ai-tech.html"   class="dropdown-item">AI 기술</a>
+            <a href="quality.html"   class="dropdown-item">품질 보증</a>
+          </div>
+        </div>
+        <div class="gnb-item">포트폴리오
+          <div class="gnb-dropdown">
+            <a href="portfolio.html" class="dropdown-item">전체 보기</a>
+            <a href="portfolio.html" class="dropdown-item">커머스/쇼핑몰</a>
+            <a href="portfolio.html" class="dropdown-item">스타트업/기업</a>
+            <a href="portfolio.html" class="dropdown-item">캠페인/이벤트</a>
+          </div>
+        </div>
+        <a href="pricing.html"    class="gnb-item">요금제</a>
+        <a href="benchmark.html"  class="gnb-item" style="color:var(--brand-accent);font-weight:700">무료 벤치마킹</a>
+        <a href="blog.html"       class="gnb-item">블로그</a>
+      </nav>
+      <div class="header-actions">
+        <a href="benchmark.html" class="btn btn-outline btn-sm">무료 벤치마킹</a>
+        <a href="start.html"     class="btn btn-accent  btn-sm">프로젝트 시작하기 ●</a>
+        <button class="mobile-menu-btn" aria-label="메뉴">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  
+  <section class="port-hero">
+    <div class="container">
+      <div class="badge badge-primary reveal" style="margin-bottom:16px">포트폴리오</div>
+      <h1 class="reveal">AI가 만든 실제 결과물</h1>
+      <p class="reveal">커머스부터 기업 홈까지, 다양한 프로젝트를 확인해보세요.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="port-filters reveal">
+        <button class="port-filter active" onclick="filterPort(this,'all')">전체</button>
+        <button class="port-filter" onclick="filterPort(this,'커머스')">커머스/쇼핑몰</button>
+        <button class="port-filter" onclick="filterPort(this,'스타트업')">스타트업/기업</button>
+        <button class="port-filter" onclick="filterPort(this,'이벤트')">이벤트/캠페인</button>
+        <button class="port-filter" onclick="filterPort(this,'기업홈')">기업 홈페이지</button>
+        <button class="port-filter" onclick="filterPort(this,'랜딩')">랜딩페이지</button>
+      </div>
+      <div class="port-grid">
+      <div class="port-card reveal">
+        <div class="port-thumb" style="background:linear-gradient(135deg,#0EA5E9,#0369a1)">
+          🛍️
+          <span class="port-tag">커머스</span>
+        </div>
+        <div class="port-body">
+          <h3 class="port-title">패션 브랜드 쇼핑몰</h3>
+          <div class="port-meta">
+            <div class="port-meta-item">⏱ 12일</div>
+            <div class="port-meta-item">✨ 결제 연동</div>
+          </div>
+          <p class="port-desc">20페이지 규모의 풀 쇼핑몰. 상품 관리, 장바구니, 결제, 주문 관리 시스템 포함.</p>
+          <div class="port-tags"><span class="port-tech">Next.js</span> <span class="port-tech">Tailwind</span> <span class="port-tech">Stripe</span> <span class="port-tech">NCP</span></div>
+          <a href="start.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">이런 사이트 만들기 →</a>
+        </div>
+      </div>
+
+      <div class="port-card reveal">
+        <div class="port-thumb" style="background:linear-gradient(135deg,#7C3AED,#4f46e5)">
+          🚀
+          <span class="port-tag">스타트업</span>
+        </div>
+        <div class="port-body">
+          <h3 class="port-title">SaaS 서비스 랜딩</h3>
+          <div class="port-meta">
+            <div class="port-meta-item">⏱ 5일</div>
+            <div class="port-meta-item">✨ A/B 테스트</div>
+          </div>
+          <p class="port-desc">전환율 최적화에 초점을 맞춘 SaaS 랜딩페이지. 히어로, 기능, 요금제, 데모 신청 포함.</p>
+          <div class="port-tags"><span class="port-tech">Next.js</span> <span class="port-tech">Framer Motion</span> <span class="port-tech">HubSpot</span></div>
+          <a href="start.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">이런 사이트 만들기 →</a>
+        </div>
+      </div>
+
+      <div class="port-card reveal">
+        <div class="port-thumb" style="background:linear-gradient(135deg,#F97316,#ea580c)">
+          🎉
+          <span class="port-tag">이벤트</span>
+        </div>
+        <div class="port-body">
+          <h3 class="port-title">컨퍼런스 행사 페이지</h3>
+          <div class="port-meta">
+            <div class="port-meta-item">⏱ 3일</div>
+            <div class="port-meta-item">✨ 신청 폼</div>
+          </div>
+          <p class="port-desc">IT 컨퍼런스 행사 페이지. 세션 일정, 연사 소개, 사전 신청, 장소 안내 포함.</p>
+          <div class="port-tags"><span class="port-tech">HTML</span> <span class="port-tech">CSS</span> <span class="port-tech">Supabase</span></div>
+          <a href="start.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">이런 사이트 만들기 →</a>
+        </div>
+      </div>
+
+      <div class="port-card reveal">
+        <div class="port-thumb" style="background:linear-gradient(135deg,#374151,#111827)">
+          🏢
+          <span class="port-tag">기업홈</span>
+        </div>
+        <div class="port-body">
+          <h3 class="port-title">제조업 기업 홈페이지</h3>
+          <div class="port-meta">
+            <div class="port-meta-item">⏱ 14일</div>
+            <div class="port-meta-item">✨ 다국어</div>
+          </div>
+          <p class="port-desc">50년 역사 제조업 기업의 브랜드 리뉴얼. 한/영/일 3개국어, 제품 카탈로그 포함.</p>
+          <div class="port-tags"><span class="port-tech">Next.js</span> <span class="port-tech">i18n</span> <span class="port-tech">NCP CDN</span></div>
+          <a href="start.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">이런 사이트 만들기 →</a>
+        </div>
+      </div>
+
+      <div class="port-card reveal">
+        <div class="port-thumb" style="background:linear-gradient(135deg,#00C896,#059669)">
+          📱
+          <span class="port-tag">앱소개</span>
+        </div>
+        <div class="port-body">
+          <h3 class="port-title">피트니스 앱 소개 페이지</h3>
+          <div class="port-meta">
+            <div class="port-meta-item">⏱ 7일</div>
+            <div class="port-meta-item">✨ 앱스토어 연동</div>
+          </div>
+          <p class="port-desc">피트니스 앱 마케팅 랜딩페이지. 앱스토어/플레이스토어 연동, 기능 애니메이션 포함.</p>
+          <div class="port-tags"><span class="port-tech">Next.js</span> <span class="port-tech">Lottie</span> <span class="port-tech">App Store API</span></div>
+          <a href="start.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">이런 사이트 만들기 →</a>
+        </div>
+      </div>
+
+      <div class="port-card reveal">
+        <div class="port-thumb" style="background:linear-gradient(135deg,#EC4899,#db2777)">
+          💎
+          <span class="port-tag">랜딩</span>
+        </div>
+        <div class="port-body">
+          <h3 class="port-title">뷰티 브랜드 랜딩</h3>
+          <div class="port-meta">
+            <div class="port-meta-item">⏱ 4일</div>
+            <div class="port-meta-item">✨ 제품 구매 연동</div>
+          </div>
+          <p class="port-desc">프리미엄 뷰티 브랜드 신제품 런칭 페이지. 비디오 히어로, 성분 소개, 구매 연동.</p>
+          <div class="port-tags"><span class="port-tech">Next.js</span> <span class="port-tech">Tailwind</span> <span class="port-tech">Cafe24 API</span></div>
+          <a href="start.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">이런 사이트 만들기 →</a>
+        </div>
+      </div>
+
+      <div class="port-card reveal">
+        <div class="port-thumb" style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+          🍕
+          <span class="port-tag">외식</span>
+        </div>
+        <div class="port-body">
+          <h3 class="port-title">프랜차이즈 음식점 홈</h3>
+          <div class="port-meta">
+            <div class="port-meta-item">⏱ 8일</div>
+            <div class="port-meta-item">✨ 매장 찾기</div>
+          </div>
+          <p class="port-desc">전국 150개 매장을 가진 프랜차이즈 공식 홈페이지. 카카오맵 매장 찾기, 메뉴판 포함.</p>
+          <div class="port-tags"><span class="port-tech">Next.js</span> <span class="port-tech">Kakao Map API</span> <span class="port-tech">Sanity</span></div>
+          <a href="start.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">이런 사이트 만들기 →</a>
+        </div>
+      </div>
+
+      <div class="port-card reveal">
+        <div class="port-thumb" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">
+          🏫
+          <span class="port-tag">교육</span>
+        </div>
+        <div class="port-body">
+          <h3 class="port-title">온라인 교육 플랫폼</h3>
+          <div class="port-meta">
+            <div class="port-meta-item">⏱ 21일</div>
+            <div class="port-meta-item">✨ 수강 신청 + 결제</div>
+          </div>
+          <p class="port-desc">온라인 강의 플랫폼. 강좌 목록, 수강 신청, 결제, 학습 진도 관리 포함.</p>
+          <div class="port-tags"><span class="port-tech">Next.js</span> <span class="port-tech">Supabase</span> <span class="port-tech">Stripe</span> <span class="port-tech">Video.js</span></div>
+          <a href="start.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">이런 사이트 만들기 →</a>
+        </div>
+      </div>
+
+      <div class="port-card reveal">
+        <div class="port-thumb" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">
+          🏨
+          <span class="port-tag">여행</span>
+        </div>
+        <div class="port-body">
+          <h3 class="port-title">부티크 호텔 예약 사이트</h3>
+          <div class="port-meta">
+            <div class="port-meta-item">⏱ 10일</div>
+            <div class="port-meta-item">✨ 예약 시스템</div>
+          </div>
+          <p class="port-desc">소규모 부티크 호텔 공식 예약 사이트. 실시간 가용 객실, 날짜 선택, 결제 연동.</p>
+          <div class="port-tags"><span class="port-tech">Next.js</span> <span class="port-tech">React Calendar</span> <span class="port-tech">Toss Pay</span></div>
+          <a href="start.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">이런 사이트 만들기 →</a>
+        </div>
+      </div></div>
+    </div>
+  </section>
+
+  <section class="section-sm" style="background:var(--bg-section)">
+    <div class="container">
+      <div style="text-align:center" class="reveal">
+        <h2 style="margin-bottom:16px">원하는 사이트가 없으신가요?</h2>
+        <p style="color:var(--text-sub);margin-bottom:32px;font-size:1.1rem">업종과 요구사항을 말씀해주시면 맞춤형으로 제작해드립니다.</p>
+        <a href="start.html" class="btn btn-accent btn-lg">맞춤 제작 상담하기 →</a>
+      </div>
+    </div>
+  </section>
+
+  
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="logo" style="color:white;margin-bottom:16px">
+            <div class="logo-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M10 2l8 6-3 10H5L2 8l8-6z" fill="rgba(255,255,255,0.3)" stroke="white" stroke-width="1.5"/>
+              </svg>
+            </div>
+            AutoWeb
+          </div>
+          <p style="color:rgba(255,255,255,0.55);font-size:0.9rem;line-height:1.7">
+            문의부터 배포까지, AI가 알아서 합니다.<br>
+            아이뱅크 AX사업본부가 운영하는<br>
+            AI 자동화 웹/앱 개발 서비스.
+          </p>
+          <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap">
+            <a href="start.html"     class="btn-accent btn btn-sm" style="font-size:0.8rem">프로젝트 시작</a>
+            <a href="benchmark.html" class="btn-outline btn btn-sm" style="font-size:0.8rem">무료 벤치마킹</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <ul class="footer-links">
+            <li><a href="service.html">10단계 프로세스</a></li>
+            <li><a href="ai-tech.html">AI 기술 소개</a></li>
+            <li><a href="quality.html">품질 보증</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>포트폴리오</h4>
+          <ul class="footer-links">
+            <li><a href="portfolio.html">전체 보기</a></li>
+            <li><a href="portfolio.html">커머스/쇼핑몰</a></li>
+            <li><a href="portfolio.html">스타트업/기업</a></li>
+            <li><a href="portfolio.html">이벤트/캠페인</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>고객지원</h4>
+          <ul class="footer-links">
+            <li><a href="start.html">프로젝트 시작</a></li>
+            <li><a href="benchmark.html">무료 벤치마킹</a></li>
+            <li><a href="pricing.html">요금제</a></li>
+            <li><a href="blog.html">블로그</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 ibank AX — AutoWeb Agent. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#">개인정보처리방침</a>
+          <a href="#">이용약관</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  
+<script>
+  // Header scroll (transparent 헤더 전용)
+  const awHdr = document.getElementById('aw-header');
+  if (awHdr) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        awHdr.classList.remove('transparent');
+        awHdr.classList.add('solid');
+      } else {
+        awHdr.classList.add('transparent');
+        awHdr.classList.remove('solid');
+      }
+    });
+  }
+  // Scroll Reveal
+  const revEls = document.querySelectorAll('.reveal');
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  revEls.forEach(r => revObs.observe(r));
+</script>
+
+  
+<script>
+  function filterPort(btn, cat) {
+    document.querySelectorAll('.port-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // 실제로는 data-cat 속성으로 필터링 구현
+  }
+</script>
+
+</body>
+</html>
